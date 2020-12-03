@@ -11,7 +11,7 @@ CAML_OBJ= $(CAML_FILE:$(SRC_PATH)/%.ml=$(BUILD_PATH)/%.cmx)
 LEX_OBJ= $(LEX_FILE:$(SRC_PATH)/%.mll=$(BUILD_PATH)/%.cmx)
 YACC_OBJ= $(YACC_FILE:$(SRC_PATH)/%.mly=$(BUILD_PATH)/%.cmx)
 
-OBJ= $(CAML_OBJ) $(LEX_OBJ) $(YACC_OBJ)
+OBJ= $(CAML_OBJ) $(YACC_OBJ) $(LEX_OBJ) 
 
 all: $(EXEC)
 
@@ -29,7 +29,7 @@ $(BUILD_PATH)/%.ml: $(SRC_PATH)/%.mll
 
 $(BUILD_PATH)/%.ml: $(SRC_PATH)/%.mly
 	menhir --base $(@:$(BUILD_PATH)/%.ml=$(BUILD_PATH)/%) $<
-	ocamlc -o $(@:$(BUILD_PATH)/%.ml=$(BUILD_PATH)/%.cmi) $(@:$(BUILD_PATH)/%.ml=$(BUILD_PATH)/%.mli)
+	ocamlc -o $(@:$(BUILD_PATH)/%.ml=$(BUILD_PATH)/%.cmi) $(@:$(BUILD_PATH)/%.ml=$(BUILD_PATH)/%.mli) -I $(BUILD_PATH)
 
 clean:
 	rm -rf $(BUILD_PATH)/* $(EXEC)
