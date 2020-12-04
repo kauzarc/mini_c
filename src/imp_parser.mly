@@ -11,7 +11,6 @@
 %token PUTCHAR IF ELSE WHILE RETURN
 %token VOID INT BOOL
 %token COMMA SEMI
-
 %token EOF
 
 %type <Imp.instr> instr

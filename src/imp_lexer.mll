@@ -17,7 +17,7 @@
         Hashtbl.add key_caracters '(' PAR_O;
         Hashtbl.add key_caracters ')' PAR_F;
         Hashtbl.add key_caracters '{' BR_O;
-        Hashtbl.add key_caracters '}' PAR_F;
+        Hashtbl.add key_caracters '}' BR_F;
         Hashtbl.add key_caracters '+' PLUS;
         Hashtbl.add key_caracters '*' FOIS;
         Hashtbl.add key_caracters '<' LT;
