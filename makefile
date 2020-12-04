@@ -13,7 +13,7 @@ YACC_OBJ= $(YACC_FILE:$(SRC_PATH)/%.mly=$(BUILD_PATH)/%.cmx)
 
 OBJ= $(CAML_OBJ) $(YACC_OBJ) $(LEX_OBJ) 
 
-all: $(EXEC)
+all: prep $(EXEC)
 
 $(EXEC): $(OBJ)
 	ocamlopt $^ -o $@
@@ -30,6 +30,9 @@ $(BUILD_PATH)/%.ml: $(SRC_PATH)/%.mll
 $(BUILD_PATH)/%.ml: $(SRC_PATH)/%.mly
 	menhir --base $(@:$(BUILD_PATH)/%.ml=$(BUILD_PATH)/%) $<
 	ocamlc -o $(@:$(BUILD_PATH)/%.ml=$(BUILD_PATH)/%.cmi) $(@:$(BUILD_PATH)/%.ml=$(BUILD_PATH)/%.mli) -I $(BUILD_PATH)
+
+prep:
+	mkdir -p $(BUILD_PATH)
 
 clean:
 	rm -rf $(BUILD_PATH)/* $(EXEC)
