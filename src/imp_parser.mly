@@ -1,5 +1,9 @@
 %{
   open Imp
+
+  type declaration =
+    | Fn of fun_def
+    | Var of (string * typ * expr)
 %}
 
 %type <Imp.expr> expr
@@ -27,19 +31,62 @@
 %%
 
 prog:
-| gl=list(var) fn=nonempty_list(fonction) EOF 
+| d=list(declaration) EOF 
   {
+    let (gl, fn) =
+      let rec aux d gl fn =
+        match d with
+        | [] -> ((List.rev gl), (List.rev fn))
+        | Fn(f)::lt -> aux lt gl (f::fn)
+        | Var(v)::lt -> aux lt (v::gl) fn
+      in
+      aux d [] []
+    in
+
+    let (main, others) =
+      let (mains, others) =
+        List.partition
+          (fun f -> f.name = "main")
+          fn
+      in
+      match mains with
+      | [] -> failwith "their is no main fonction"
+      | main::[] -> (main, others)
+      | _ -> failwith "only one main fonction is alowed"
+    in
+
     let (var, set) =
       List.split 
         (List.map 
-          (fun (n, t, e) -> ((n, t), (n, e)))
+          (fun (n, t, e) -> ((n, t), Set(n, e)))
           gl
         ) 
     in
+
+    let main =
+      {
+        name = main.name;
+        params = main.params;
+        return = main.return;
+        locals = main.locals;
+        code = set @ main.code
+      }
+    in
+
     {
       globals = var;
-      functions = fn
+      functions = main::others
     }
+  }
+
+declaration:
+| v=var
+  {
+    Var(v)
+  }
+| f=fonction
+  {
+    Fn(f)
   }
 
 var:
