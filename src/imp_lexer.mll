@@ -28,7 +28,7 @@
 }
 
 let ident = ['A'-'Z' 'a'-'z' '_'] ['A'-'Z' 'a'-'z' '0'-'9' '_']*
-let integer = ('-')? ['1'-'9'] ['0'-'9']*
+let integer = (('-')? ['1'-'9'] ['0'-'9']*) | '0'
 let sep = [' ' '\n' '\t']
 
 rule scan = parse
