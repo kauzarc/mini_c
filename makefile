@@ -13,6 +13,8 @@ CAMLI_OBJ= $(CAMLI_FILE:$(SRC_PATH)/%.mli=$(BUILD_PATH)/%.cmi)
 LEX_OBJ= $(LEX_FILE:$(SRC_PATH)/%.mll=$(BUILD_PATH)/%.cmx)
 YACC_OBJ= $(YACC_FILE:$(SRC_PATH)/%.mly=$(BUILD_PATH)/%.cmx)
 
+CONFLICTS= $(YACC_FILE:$(SRC_PATH)/%.mly=$(BUILD_PATH)/%.conflicts)
+
 OBJ= $(YACC_OBJ) $(LEX_OBJ) $(CAML_OBJ)
 
 all: prep $(EXEC)
@@ -41,3 +43,8 @@ prep:
 
 clean:
 	rm -rf $(BUILD_PATH)/* $(EXEC)
+
+menhir_v: $(CAMLI_OBJ) $(CONFLICTS)
+
+$(BUILD_PATH)/%.conflicts: $(SRC_PATH)/%.mly
+	menhir -v --base $(@:$(BUILD_PATH)/%.conflicts=$(BUILD_PATH)/%) $<

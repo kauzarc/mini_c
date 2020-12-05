@@ -19,6 +19,10 @@
 %type <Imp.fun_def> fonction
 %type <Imp.prog> prog
 
+%left PLUS
+%left FOIS
+%nonassoc LT
+
 %start prog
 %%
 
@@ -39,7 +43,7 @@ prog:
   }
 
 var:
-| t=typ n=ID EQUAL e=expr SEMI
+| t=typ n=ID EQUAL e=expr SEMI 
   {
     (n, t, e)
   }
@@ -126,6 +130,10 @@ expr:
   {
     Call(n, p)
   }
+| PAR_O e=expr PAR_F
+  {
+    e
+  }
 
 typ:
 | VOID
@@ -134,9 +142,9 @@ typ:
   }
 | INT
   {
-    Bool
+    Int
   }
 | BOOL
   {
-    Int
+    Bool
   }
