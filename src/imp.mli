@@ -43,4 +43,6 @@ type prog = {
   functions: fun_def list;
 }
 
-val well_typed_prog : prog -> bool
+val well_typed : prog -> bool
+
+val print : prog -> unit
