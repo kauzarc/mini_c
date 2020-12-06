@@ -42,3 +42,5 @@ type prog = {
   globals:   (string * typ) list;
   functions: fun_def list;
 }
+
+val well_typed_prog : prog -> bool

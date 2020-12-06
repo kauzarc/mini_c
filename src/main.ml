@@ -31,11 +31,7 @@ let print_imp_token () =
   in
   printer ()
 
-let print_imp_abr () =
-  let file_chanel_in = open_in "example.imp" in
-  let lexbuf = Lexing.from_channel file_chanel_in in
-  let prog = Imp_parser.prog Imp_lexer.scan lexbuf in
-
+let print_imp_abr prog =
   let rec print_prog (p : Imp.prog) =
     Printf.printf "----------GLOBALS:----------\n";
     List.iter print_var p.globals;
@@ -90,4 +86,10 @@ let print_imp_abr () =
   print_prog prog
 
 let _ =
-  print_imp_abr ()
+  let file_chanel_in = open_in "example.imp" in
+  let lexbuf = Lexing.from_channel file_chanel_in in
+  let prog = Imp_parser.prog Imp_lexer.scan lexbuf in
+  print_imp_abr prog;
+  if Imp.well_typed_prog prog
+  then Printf.printf "well typed !\n"
+  else Printf.printf "not well typed !\n"
