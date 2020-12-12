@@ -1,12 +1,12 @@
 %{
-  open Imp
+  open Mc
 
   type declaration =
     | Fn of fun_def
     | Var of (string * typ * expr)
 %}
 
-%type <Imp.expr> expr
+%type <Mc.expr> expr
 
 %token <int> CONST
 %token <string> ID
@@ -17,11 +17,11 @@
 %token COMMA SEMI
 %token EOF
 
-%type <Imp.instr> instr
-%type <Imp.seq> seq
-%type <Imp.typ> typ
-%type <Imp.fun_def> fonction
-%type <Imp.prog> prog
+%type <Mc.instr> instr
+%type <Mc.seq> seq
+%type <Mc.typ> typ
+%type <Mc.fun_def> fonction
+%type <Mc.prog> prog
 
 %left PLUS
 %left FOIS

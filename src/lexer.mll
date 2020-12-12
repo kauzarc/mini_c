@@ -1,5 +1,5 @@
 {
-    open Imp_parser
+    open Parser
 
     let key_words = Hashtbl.create 10
     let _ = 

@@ -1,9 +1,11 @@
-open Imp
+open Lexer
+open Parser
+open Mc
 
 let _ =
-  let file_chanel_in = open_in "example.imp" in
+  let file_chanel_in = open_in "example.mc" in
   let lexbuf = Lexing.from_channel file_chanel_in in
-  let prog = Imp_parser.prog Imp_lexer.scan lexbuf in
+  let prog = prog scan lexbuf in
 
   print prog;
 
