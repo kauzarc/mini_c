@@ -69,22 +69,35 @@ and type_expr (env : typ_env) (expr : expr) =
 
 and well_typed_instruction (env : typ_env) (rt : typ) (i : instr) =
   match i with
-  | Putchar(e) -> type_expr env e = Int
+  | Putchar(e) -> 
+    if type_expr env e = Int
+    then true
+    else failwith "putchar can only be applied to int value"
 
-  | Set(n, e) -> type_var env n = type_expr env e
+  | Set(n, e) -> 
+    if type_var env n = type_expr env e
+    then true
+    else failwith "variable and expression must have the same type in assigement"
 
-  | If(b, s1, s2) -> 
-    type_expr env b = Bool && 
-    well_typed_sequence env rt s1 &&
-    well_typed_sequence env rt s2
+  | If(b, s1, s2) ->
+    if type_expr env b = Bool
+    then 
+      well_typed_sequence env rt s1 &&
+      well_typed_sequence env rt s2
+    else failwith "if statement can only be applied to boolean"
 
   | While(b, s) ->
-    type_expr env b = Bool && 
-    well_typed_sequence env rt s
+    if type_expr env b = Bool
+    then 
+      well_typed_sequence env rt s
+    else failwith "while statement can only be applied to boolean"
 
-  | Return(e) -> type_expr env e = rt
+  | Return(e) -> 
+    if type_expr env e = rt
+    then true
+    else failwith "return value type and fonction return type must be the same"
 
-  | Expr(e) -> true
+  | Expr(e) -> let _  = type_expr env e in true
 
 and well_typed_sequence (env : typ_env) (rt : typ) (s : seq) = 
   List.for_all (well_typed_instruction env rt) s
