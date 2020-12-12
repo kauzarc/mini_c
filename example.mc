@@ -1,77 +1,5 @@
 int PARAM = 5;
 
-bool true = 0 < 1;
-bool false = 1 < 0;
-
-bool lt(int n1, int n2)
-{
-    return n1 < n2;
-}
-
-bool mt(int n1, int n2)
-{
-    return n2 < n1;
-}
-
-bool equal(int n1, int n2)
-{
-    if (n1 < n2)
-    {
-        return false;
-    }
-    else
-    {
-        if (n2 < n1)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
-}
-
-bool and(bool b1, bool b2)
-{
-    if (b1)
-    {
-        return b2;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-bool or(bool b1, bool b2)
-{
-    if (b1)
-    {
-        return true;
-    }
-    else
-    {
-        return b2;
-    }
-}
-
-int fibo(int n)
-{
-    int i = 0;
-    int j = 1;
-    int temp = 0;
-    int k = 0;
-    while (k < n)
-    {
-        temp = i;
-        i = j;
-        j = j + temp;
-        k = k + 1;
-    }
-    return i;
-}
-
 int fact(int n)
 {
     if (n < 2)
@@ -86,7 +14,5 @@ int fact(int n)
 
 void main()
 {
-    int s = 1 + (2 + 3) + 4 + 5 * 6 + 7;
     putchar(fact(PARAM));
-    putchar(fibo(PARAM));
 }
