@@ -12,7 +12,7 @@
 %token <string> ID
 %token PAR_O PAR_F BR_O BR_F
 %token PLUS FOIS LT EQUAL
-%token PUTCHAR IF ELSE WHILE RETURN
+%token PUTCHAR IF ELSE WHILE RETURN FOR
 %token VOID INT BOOL
 %token COMMA SEMI
 %token EOF

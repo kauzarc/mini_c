@@ -10,7 +10,8 @@
         Hashtbl.add key_words "return" RETURN;
         Hashtbl.add key_words "void" VOID;
         Hashtbl.add key_words "int" INT;
-        Hashtbl.add key_words "bool" BOOL
+        Hashtbl.add key_words "bool" BOOL;
+        Hashtbl.add key_words "for" FOR
     
     let key_caracters = Hashtbl.create 10
     let _ =
