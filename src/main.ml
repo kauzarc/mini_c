@@ -3,6 +3,7 @@ open Parser
 open Type
 open Mc
 open Printf
+open Interpreter
 
 let main () =
   if Array.length Sys.argv <> 2
@@ -14,7 +15,13 @@ let main () =
       let prog = prog scan lexbuf in
       printf "%s\n" (prog_to_string prog);
       if well_typed prog
-      then printf "well typed program !\n"
+      then 
+        begin
+          printf "well typed program !\n";
+          printf "evaluation:\n";
+          let _ = interpret prog in
+          printf "\nsuccess\n"
+        end
       else failwith "type error"
     end
 

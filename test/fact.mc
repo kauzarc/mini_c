@@ -12,5 +12,5 @@ int fact(int n)
 
 void main()
 {
-    putchar(fact(PARAM));
+    fact(PARAM);
 }

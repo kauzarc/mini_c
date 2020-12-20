@@ -14,5 +14,5 @@ int fibo(int n)
 
 void main()
 {
-    putchar(fibo(PARAM));
+    fibo(PARAM);
 }
