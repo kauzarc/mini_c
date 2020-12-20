@@ -2,8 +2,8 @@
   open Mc
 
   type declaration =
-    | Fn of fun_def
-    | Var of (string * typ * expr)
+  | Global of typ * string * expr
+  | Fonction of fun_def
 %}
 
 %type <Mc.expr> expr
@@ -17,10 +17,6 @@
 %token COMMA SEMI
 %token EOF
 
-%type <Mc.instr> instr
-%type <Mc.seq> seq
-%type <Mc.typ> typ
-%type <Mc.fun_def> fonction
 %type <Mc.prog> prog
 
 %left PLUS
@@ -31,93 +27,77 @@
 %%
 
 prog:
-| d=list(declaration) EOF 
+| d=list(declaration) EOF
   {
-    let (gl, fn) =
-      let rec aux d gl fn =
-        match d with
-        | [] -> ((List.rev gl), (List.rev fn))
-        | Fn(f)::lt -> aux lt gl (f::fn)
-        | Var(v)::lt -> aux lt (v::gl) fn
-      in
-      aux d [] []
+    let globals, fonctions =
+      List.fold_right
+        (fun d (g, f) ->
+          match d with
+          | Global(t, n, e) -> ((t, n, e)::g, f)
+          | Fonction(fn) -> (g, fn::f))
+        d
+        ([], [])
     in
-
-    let (main, others) =
-      let (mains, others) =
-        List.partition
-          (fun f -> f.name = "main")
-          fn
-      in
+    let mains, others =
+      List.partition
+        (fun f -> f.name = "main")
+        fonctions
+    in
+    let main =
       match mains with
-      | [] -> failwith "their is no main fonction"
-      | main::[] -> (main, others)
-      | _ -> failwith "only one main fonction is alowed"
+      | [] -> failwith "can't find main fonction"
+      | main::[] -> main
+      | _ -> failwith "can't declare more than one main function"
     in
-
-    let (var, set) =
-      List.split 
-        (List.map 
-          (fun (n, t, e) -> ((n, t), Set(n, e)))
-          gl
-        ) 
+    let globals, sets =
+      List.fold_right
+        (fun (t, n, e) (g, s) -> ((n, t)::g, (Set(n, e))::s))
+        globals
+        ([], [])
     in
-
     let main =
       {
         name = main.name;
         params = main.params;
         return = main.return;
         locals = main.locals;
-        code = set @ main.code
+        code = sets @ main.code;
       }
     in
-
     {
-      globals = var;
-      functions = main::others
+      globals = globals;
+      functions = main::others;
     }
   }
 
 declaration:
-| v=var
+| v=var SEMI
   {
-    Var(v)
+    let (t, n, e) = v in
+    Global(t, n, e)
   }
 | f=fonction
   {
-    Fn(f)
-  }
-
-var:
-| t=typ n=ID EQUAL e=expr SEMI 
-  {
-    (n, t, e)
+    Fonction(f)
   }
 
 fonction:
-| t=typ n=ID PAR_O p=separated_list(COMMA, param_def) PAR_F BR_O v=list(var) s=seq BR_F
+| t=typ n=ID PAR_O p=separated_list(COMMA, param_def) PAR_F BR_O s=seq BR_F
   {
-    let (var, set) = 
-      List.split
-        (List.map 
-          (fun (n, t, e) -> ((n, t), Set(n, e)))
-          v
-        )
-    in
+    let (code, locals) = List.split s in
     {
       name = n;
-      params = p;
+      params = List.map (fun (t, n) -> (n, t)) p;
       return = t;
-      locals = var;
-      code = set @ s
+      locals = List.concat locals;
+      code = code;
     }
   }
 
 param_def:
 | t=typ n=ID
   {
-    (n, t)
+    (t, n)
   }
 
 seq: 
@@ -126,30 +106,51 @@ seq:
     s
   }
 
+var:
+| t=typ n=ID EQUAL e=expr 
+  {
+    (t, n, e)
+  }
+
 instr:
 | PUTCHAR PAR_O e=expr PAR_F SEMI
   {
-    Putchar(e)
+    (Putchar(e), [])
+  }
+| v=var SEMI
+  {
+    let (t, n, e) = v in
+    (Set(n, e), [(n, t)])
   }
 | n=ID EQUAL e=expr SEMI
   {
-    Set(n, e)
+    (Set(n, e), [])
   }
 | IF PAR_O e=expr PAR_F BR_O s1=seq BR_F ELSE BR_O s2=seq BR_F
   {
-    If(e, s1, s2)
+    let s1, l1 = List.split s1 in
+    let s2, l2 = List.split s2 in
+    (If(e, s1, s2), (List.concat l1)@(List.concat l2))
   }
 | WHILE PAR_O e=expr PAR_F BR_O s=seq BR_F
   {
-    While(e, s)
+    let s, l = List.split s in
+    (While(e, s), List.concat l)
+  }
+| FOR PAR_O v=var SEMI e=expr SEMI i=instr PAR_F BR_O s=seq BR_F
+  {
+    let (t, n, e) = v in
+    let s, sl = List.split s in
+    let i, il = i in
+    (While(e, s@[i]), (n, t)::(il @ (List.concat sl)))
   }
 | RETURN e=expr SEMI
   {
-    Return(e)
+    (Return(e), [])
   }
 | e=expr SEMI
   {
-    Expr(e)
+    (Expr(e), [])
   }
 
 expr:
