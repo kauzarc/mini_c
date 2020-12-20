@@ -19,9 +19,9 @@
 
 %type <Mc.prog> prog
 
+%nonassoc LT
 %left PLUS
 %left FOIS
-%nonassoc LT
 
 %start prog
 %%
@@ -139,7 +139,7 @@ instr:
   }
 | FOR PAR_O v=var SEMI e=expr SEMI i=instr PAR_F BR_O s=seq BR_F
   {
-    let (t, n, e) = v in
+    let (t, n, _) = v in
     let s, sl = List.split s in
     let i, il = i in
     (While(e, s@[i]), (n, t)::(il @ (List.concat sl)))
