@@ -38,31 +38,21 @@ let integer = (['1'-'9'] ['0'-'9']*) | '0'
 let sep = [' ' '\n' '\t']
 
 rule scan = parse
-    | eof
-    {
-        EOF
-    }
-
-    | integer as i
-    {
-        CONST(int_of_string i)
-    }
-
-    | ident as id
-    {
+    | eof { EOF }
+    | integer as i { CONST(int_of_string i) }
+    | ident as id {
         try
-            Hashtbl.find key_words id
-        with Not_found -> ID(id)
+            Hashtbl.find key_words id 
+        with Not_found -> ID(id) 
     }
-
-    |sep
-    {
-        scan lexbuf
-    }
-
-    | _ as c
-    {
+    | sep { scan lexbuf }
+    | _ as c {
         try
             Hashtbl.find key_caracters c
         with Not_found -> failwith "bad caracter"
     }
+
+(* let path = (ident '/')* ident ".mc"
+
+rule include buffer = parse
+    | "#include \"" path "\"\n" *)
