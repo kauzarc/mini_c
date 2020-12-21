@@ -121,6 +121,8 @@ and eval_binary_op env op e1 e2 =
 and eval_expr env e =
   match e with
   | Cst(n) -> Int(n)
+  | True -> Bool(true)
+  | False -> Bool(false)
   | Unary(op, e) -> eval_unary env op e
   | Binary(op, e1, e2) -> eval_binary_op env op e1 e2
   | Get(n) -> Env.get_var env n
@@ -170,7 +172,7 @@ and eval_instr env i =
     else eval_seq env s2
   | While(e, s) ->
     if bool_of_expr env e
-    then eval_seq env s
+    then let env' = eval_seq env s in eval_instr env' i
     else env    
   | Return(e) -> raise (EReturn(eval_expr env e))
   | Expr(e) ->

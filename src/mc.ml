@@ -5,6 +5,8 @@
 type expr =
   (* Arithmétique *)
   | Cst  of int
+  | True
+  | False
   | Unary of unary_op * expr
   | Binary of binary_op * expr * expr
   (* Variables *)
@@ -96,6 +98,8 @@ and string_of_instr instr =
 and string_of_expr expr =
   match expr with
   | Cst(n) -> "Cst(" ^ (string_of_int n) ^ ")"
+  | True -> "True"
+  | False -> "False"
   | Unary(u, e) -> "Unary(" ^ (string_of_unary_op u) ^ "," ^ (string_of_expr e) ^ ")"
   | Binary(b, e1, e2) -> "Binary(" ^ (string_of_binary_op b) ^ "," ^ (string_of_expr e1) ^ "," ^ (string_of_expr e2) ^ ")"
   | Get(name) -> "Get(\"" ^ name ^ "\")"

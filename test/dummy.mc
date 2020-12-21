@@ -1,1 +1,5 @@
-int dummy = 2;
+#include "./std.mc"
+
+void main()
+{
+}

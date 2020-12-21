@@ -10,6 +10,7 @@
 %token <string> ID
 %token EQUAL
 %token PAR_O PAR_F BR_O BR_F
+%token TRUE FALSE
 %token PLUS MINUS FOIS SLASH PERCENT LT MT DBLEQUAL EXCM AND OR
 %token PUTCHAR IF ELSE WHILE RETURN FOR
 %token VOID INT BOOL
@@ -120,6 +121,8 @@ branching:
 
 expr:
 | n=CONST { Cst(n) }
+| TRUE { True }
+| FALSE { False }
 | n=ID { Get(n) }
 | n=ID PAR_O p=separated_list(COMMA, expr) PAR_F { Call(n, p) }
 | PAR_O e=expr PAR_F { e }

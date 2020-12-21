@@ -86,6 +86,10 @@ and type_expr (env : typ_env) (expr : expr) =
   match expr with
   | Cst(_) -> Int
 
+  | True -> Bool
+
+  | False -> Bool
+
   | Unary(op, e) -> type_unary_op env op e
 
   | Binary(op, e1, e2) -> type_binary_op env op e1 e2

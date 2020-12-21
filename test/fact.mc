@@ -1,4 +1,4 @@
-#include "./hello_world.mc"
+#include "./std.mc"
 
 int PARAM = 8;
 
@@ -14,5 +14,5 @@ int fact(int n)
 
 void main()
 {
-    fact(PARAM);
+    print_int(fact(PARAM));
 }

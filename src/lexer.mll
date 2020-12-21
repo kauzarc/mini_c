@@ -13,6 +13,8 @@
             ("int", INT);
             ("bool", BOOL);
             ("for", FOR);
+            ("true", TRUE);
+            ("false", FALSE);
         ])
     
     let key_caracters =
