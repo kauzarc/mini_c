@@ -20,6 +20,7 @@
         Hashtbl.add key_caracters '{' BR_O;
         Hashtbl.add key_caracters '}' BR_F;
         Hashtbl.add key_caracters '+' PLUS;
+        Hashtbl.add key_caracters '-' MINUS;
         Hashtbl.add key_caracters '*' FOIS;
         Hashtbl.add key_caracters '<' LT;
         Hashtbl.add key_caracters '=' EQUAL;
@@ -29,7 +30,7 @@
 }
 
 let ident = ['A'-'Z' 'a'-'z' '_'] ['A'-'Z' 'a'-'z' '0'-'9' '_']*
-let integer = (('-')? ['1'-'9'] ['0'-'9']*) | '0'
+let integer = (['1'-'9'] ['0'-'9']*) | '0'
 let sep = [' ' '\n' '\t']
 
 rule scan = parse
