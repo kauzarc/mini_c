@@ -14,14 +14,14 @@ let main () =
       let buffer = preproc (Buffer.create 1000) (Lexing.from_string start_include) in
       let lexbuf = Lexing.from_string (Buffer.contents buffer) in
       let prog = prog scan lexbuf in
-      printf "program: \n%s\n\n" (string_of_prog prog);
+      printf "program: \n%s\n" (string_of_prog prog);
       if well_typed prog
       then 
         begin
-          printf "well typed program !\n";
+          printf "no type error\n";
           printf "evaluation:\n";
           let _ = interpret prog in
-          printf "\nsuccess\n"
+          printf "success\n"
         end
       else failwith "type error"
     end

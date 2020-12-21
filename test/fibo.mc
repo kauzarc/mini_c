@@ -1,3 +1,5 @@
+#include "./std.mc"
+
 int PARAM = 8;
 
 int fibo(int n)
@@ -8,11 +10,11 @@ int fibo(int n)
     }
     else
     {
-        return fibo(n + -1) + fibo(n + -2);
+        return fibo(n - 1) + fibo(n - 2);
     }
 }
 
 void main()
 {
-    fibo(PARAM);
+    print_int(fibo(PARAM));
 }

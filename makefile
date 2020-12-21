@@ -3,6 +3,3 @@ build:
 
 clean:
 	ocamlbuild -clean
-
-menhir:
-	ocamlbuild "parser2.native" -use-menhir -I src/

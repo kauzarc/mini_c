@@ -157,7 +157,6 @@ and eval_instr env i =
   | Putchar(e) ->
     begin
       let n = int_of_expr env e in
-      (* print_int n; *)
       print_char (Char.chr (n));
       env
     end

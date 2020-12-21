@@ -19,9 +19,9 @@
 
 %type <Mc.prog> prog
 
-%nonassoc DBLEQUAL
 %nonassoc EXCM
 %left AND OR
+%nonassoc DBLEQUAL
 %nonassoc LT MT
 %left PERCENT
 %left PLUS MINUS
