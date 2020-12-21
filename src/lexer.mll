@@ -1,31 +1,35 @@
 {
     open Parser
 
-    let key_words = Hashtbl.create 10
-    let _ = 
-        Hashtbl.add key_words "putchar" PUTCHAR;
-        Hashtbl.add key_words "if" IF;
-        Hashtbl.add key_words "else" ELSE;
-        Hashtbl.add key_words "while" WHILE;
-        Hashtbl.add key_words "return" RETURN;
-        Hashtbl.add key_words "void" VOID;
-        Hashtbl.add key_words "int" INT;
-        Hashtbl.add key_words "bool" BOOL;
-        Hashtbl.add key_words "for" FOR
+    let key_words = 
+        Hashtbl.of_seq (List.to_seq 
+        [
+            ("putchar", PUTCHAR);
+            ("if", IF);
+            ("else", ELSE);
+            ("while", WHILE);
+            ("return", RETURN);
+            ("void", VOID);
+            ("int", INT);
+            ("bool", BOOL);
+            ("for", FOR);
+        ])
     
-    let key_caracters = Hashtbl.create 10
-    let _ =
-        Hashtbl.add key_caracters '(' PAR_O;
-        Hashtbl.add key_caracters ')' PAR_F;
-        Hashtbl.add key_caracters '{' BR_O;
-        Hashtbl.add key_caracters '}' BR_F;
-        Hashtbl.add key_caracters '+' PLUS;
-        Hashtbl.add key_caracters '-' MINUS;
-        Hashtbl.add key_caracters '*' FOIS;
-        Hashtbl.add key_caracters '<' LT;
-        Hashtbl.add key_caracters '=' EQUAL;
-        Hashtbl.add key_caracters ',' COMMA;
-        Hashtbl.add key_caracters ';' SEMI
+    let key_caracters =
+        Hashtbl.of_seq (List.to_seq 
+        [
+            ('(', PAR_O);
+            (')', PAR_F);
+            ('{', BR_O);
+            ('}', BR_F);
+            ('+', PLUS);
+            ('-', MINUS);
+            ('*', FOIS);
+            ('<', LT);
+            ('=', EQUAL);
+            (',', COMMA);
+            (';', SEMI);
+        ])
 
 }
 
