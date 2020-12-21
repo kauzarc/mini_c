@@ -1,3 +1,5 @@
+#include "./hello_world.mc"
+
 int PARAM = 8;
 
 int fact(int n)

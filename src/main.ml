@@ -10,8 +10,9 @@ let main () =
   then printf "ERROR:\nusage: %s file.mc\n" Sys.argv.(0)
   else 
     begin
-      let file_chanel_in = open_in Sys.argv.(1) in
-      let lexbuf = Lexing.from_channel file_chanel_in in
+      let start_include = "#include \"" ^ Sys.argv.(1) ^ "\"\n" in
+      let buffer = preproc (Buffer.create 1000) (Lexing.from_string start_include) in
+      let lexbuf = Lexing.from_string (Buffer.contents buffer) in
       let prog = prog scan lexbuf in
       printf "program: \n%s\n\n" (string_of_prog prog);
       if well_typed prog

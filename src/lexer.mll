@@ -52,7 +52,15 @@ rule scan = parse
         with Not_found -> failwith "bad caracter"
     }
 
-(* let path = (ident '/')* ident ".mc"
-
-rule include buffer = parse
-    | "#include \"" path "\"\n" *)
+and preproc buffer = parse
+    | "#include \"" (((ident | "." | "..") '/')* as dirpath) ((ident ".mc") as filename) "\"\n" 
+        {
+            let current = Sys.getcwd () in
+            Sys.chdir dirpath;
+            let file_chanel_in = open_in filename in
+            let buffer = preproc buffer (Lexing.from_channel file_chanel_in) in
+            Sys.chdir current;
+            preproc buffer lexbuf
+        }
+    | _ as c { Buffer.add_char buffer c; preproc buffer lexbuf }
+    | eof { buffer } 

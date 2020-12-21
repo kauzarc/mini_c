@@ -14,8 +14,3 @@ void print_hello_world()
     putchar(32);
     putchar(33);
 }
-
-void main()
-{
-    print_hello_world();
-}
