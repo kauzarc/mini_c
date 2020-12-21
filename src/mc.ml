@@ -5,13 +5,24 @@
 type expr =
   (* Arithmétique *)
   | Cst  of int
-  | Add  of expr * expr
-  | Mul  of expr * expr
-  | Lt   of expr * expr
+  | Unary of unary_op * expr
+  | Binary of binary_op * expr * expr
   (* Variables *)
   | Get  of string
   (* Fonctions *)
   | Call of string * expr list
+and unary_op =
+  | Minus
+  | Not
+and binary_op =
+  | Add
+  | Sub
+  | Mul
+  | Div
+  | Lt
+  | And
+  | Or
+  | Eq
 
 type instr =
   | Putchar of expr
@@ -41,36 +52,6 @@ type fun_def = {
 type prog = {
   globals:   (string * typ) list;
   functions: fun_def list;
-}
-
-let example = {
-  globals=[
-    ("PARAM",Int)
-  ];
-  functions=[
-    {
-      name="main";
-      params=[];
-      return=Void;
-      locals=[];
-      code=[
-        Set("PARAM",Cst(5));
-        Putchar(Call("fact",[Get("PARAM")]))
-      ]
-    };
-    {
-      name="fact";
-      params=[("n",Int)];
-      return=Int;
-      locals=[];
-      code=[
-        If(
-          Lt(Get("n"),Cst(2)),
-          [Return(Cst(1))],
-          [Return(Mul(Get("n"),Call("fact",[Add(Get("n"),Cst(-1))])))])
-      ]
-    }
-  ]
 }
 
 let string_of_a_list string_of_a l =
@@ -114,8 +95,23 @@ and string_of_instr instr =
 and string_of_expr expr =
   match expr with
   | Cst(n) -> "Cst(" ^ (string_of_int n) ^ ")"
-  | Add(e1, e2) -> "Add(" ^ (string_of_expr e1) ^ "," ^ (string_of_expr e2) ^ ")"
-  | Mul(e1, e2) -> "Mul(" ^ (string_of_expr e1) ^ "," ^ (string_of_expr e2) ^ ")"
-  | Lt(e1, e2) -> "Lt(" ^ (string_of_expr e1) ^ "," ^ (string_of_expr e2) ^ ")"
+  | Unary(u, e) -> "Unary(" ^ (string_of_unary_op u) ^ "," ^ (string_of_expr e) ^ ")"
+  | Binary(b, e1, e2) -> "Binary(" ^ (string_of_binary_op b) ^ "," ^ (string_of_expr e1) ^ "," ^ (string_of_expr e2) ^ ")"
   | Get(name) -> "Get(\"" ^ name ^ "\")"
   | Call(name, l) -> "Call(\"" ^ name ^ "\"," ^ (string_of_a_list string_of_expr l) ^ ")"
+
+and string_of_unary_op op =
+  match op with
+  | Minus -> "Minus"
+  | Not -> "Not"
+
+and string_of_binary_op op =
+  match op with
+  | Add -> "Add"
+  | Sub -> "Sub"
+  | Mul -> "Mul"
+  | Div -> "Div"
+  | Lt -> "Lt"
+  | And -> "And"
+  | Or -> "Or"
+  | Eq -> "Eq"

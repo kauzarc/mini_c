@@ -25,8 +25,13 @@
             ('+', PLUS);
             ('-', MINUS);
             ('*', FOIS);
+            ('/', SLASH);
             ('<', LT);
+            ('>', MT);
             ('=', EQUAL);
+            ('!', EXCM);
+            ('&', AND);
+            ('|', OR);
             (',', COMMA);
             (';', SEMI);
         ])
@@ -38,6 +43,7 @@ let integer = (['1'-'9'] ['0'-'9']*) | '0'
 let sep = [' ' '\n' '\t']
 
 rule scan = parse
+    | "==" { DBLEQUAL }
     | eof { EOF }
     | integer as i { CONST(int_of_string i) }
     | ident as id {

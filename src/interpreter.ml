@@ -59,27 +59,64 @@ and bool_of_expr env e =
   | Bool(b) -> b
   | _ -> raise EBadTyping
 
-and eval_expr env e =
-  match e with
-  | Cst(n) -> Int(n)
-  | Add(e1, e2) ->
+and eval_unary env op e =
+  match op with 
+  | Minus -> let v = int_of_expr env e in Int(-v)
+  | Not -> let v = bool_of_expr env e in Bool(not v)
+
+and eval_binary_op env op e1 e2 =
+  match op with
+  | Add -> 
     begin
       let v1 = int_of_expr env e1 in
       let v2 = int_of_expr env e2 in
       Int(v1 + v2)
     end
-  | Mul(e1, e2) ->
+  | Sub ->
+    begin
+      let v1 = int_of_expr env e1 in
+      let v2 = int_of_expr env e2 in
+      Int(v1 - v2)
+    end
+  | Mul ->
     begin
       let v1 = int_of_expr env e1 in
       let v2 = int_of_expr env e2 in
       Int(v1 * v2)
     end
-  | Lt(e1, e2) ->
+  | Div ->
+    begin
+      let v1 = int_of_expr env e1 in
+      let v2 = int_of_expr env e2 in
+      Int(v1 / v2)
+    end
+  | Lt ->
     begin
       let v1 = int_of_expr env e1 in
       let v2 = int_of_expr env e2 in
       Bool(v1 < v2)
     end
+  | And ->
+    if bool_of_expr env e1
+    then Bool(bool_of_expr env e2)
+    else Bool(false)
+  | Or ->
+    if bool_of_expr env e1
+    then Bool(true)
+    else Bool(bool_of_expr env e2)
+  | Eq ->
+    begin
+      match eval_expr env e1, eval_expr env e2 with
+      | Int(n1), Int(n2) -> Bool(n1 = n2)
+      | Bool(b1), Bool(b2) -> Bool(b1 = b2)
+      | _ -> raise EBadTyping
+    end
+
+and eval_expr env e =
+  match e with
+  | Cst(n) -> Int(n)
+  | Unary(op, e) -> eval_unary env op e
+  | Binary(op, e1, e2) -> eval_binary_op env op e1 e2
   | Get(n) -> Env.get_var env n
   | Call(n, p) -> 
     begin

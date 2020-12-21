@@ -33,25 +33,59 @@ and type_var env n =
     List.assoc n env.globals
   with Not_found -> failwith ("variable " ^ n ^ " : does not exist")
 
+and type_unary_op env op e =
+  match op with
+  | Minus ->
+    if type_expr env e = Int 
+    then Int
+    else failwith "can't take the oposite of non int value"
+  | Not ->
+    if type_expr env e = Bool 
+    then Bool
+    else failwith "can't inverse non bool value"
+
+and type_binary_op env op e1 e2 =
+  match op with 
+  | Add ->
+    if type_expr env e1 = Int && type_expr env e2 = Int
+    then Int
+    else failwith "can't add non int value"
+  | Sub ->
+    if type_expr env e1 = Int && type_expr env e2 = Int
+    then Int
+    else failwith "can't sub non int value"
+  | Mul -> 
+    if type_expr env e1 = Int && type_expr env e2 = Int
+    then Int
+    else failwith "can't mul non int value"
+  | Div -> if type_expr env e1 = Int && type_expr env e2 = Int
+    then Int
+    else failwith "can't divide non int value"
+  | Lt -> 
+    if type_expr env e1 = Int && type_expr env e2 = Int
+    then Bool
+    else failwith "can't compare non int value"
+  | And ->
+    if type_expr env e1 = Bool && type_expr env e2 = Bool
+    then Bool
+    else failwith "can't and non bool value"
+  | Or ->
+    if type_expr env e1 = Bool && type_expr env e2 = Bool
+    then Bool
+    else failwith "can't or non bool value"
+  | Eq ->
+    if type_expr env e1 = type_expr env e2
+    then Bool
+    else failwith "both part of an equality must have the same type"
+
 
 and type_expr (env : typ_env) (expr : expr) =
   match expr with
   | Cst(_) -> Int
 
-  | Add(e1, e2) ->
-    if type_expr env e1 = Int && type_expr env e2 = Int
-    then Int
-    else failwith "can't add non int value"
+  | Unary(op, e) -> type_unary_op env op e
 
-  | Mul(e1, e2) ->
-    if type_expr env e1 = Int && type_expr env e2 = Int
-    then Int
-    else failwith "can't mul non int value"
-
-  | Lt(e1, e2) ->
-    if type_expr env e1 = Int && type_expr env e2 = Int
-    then Bool
-    else failwith "can't compare non int value"
+  | Binary(op, e1, e2) -> type_binary_op env op e1 e2
 
   | Get(n) -> type_var env n
 

@@ -8,8 +8,9 @@
 
 %token <int> CONST
 %token <string> ID
+%token EQUAL
 %token PAR_O PAR_F BR_O BR_F
-%token PLUS FOIS LT EQUAL MINUS
+%token PLUS MINUS FOIS SLASH LT MT DBLEQUAL EXCM AND OR
 %token PUTCHAR IF ELSE WHILE RETURN FOR
 %token VOID INT BOOL
 %token COMMA SEMI
@@ -17,9 +18,12 @@
 
 %type <Mc.prog> prog
 
-%nonassoc LT
+%nonassoc DBLEQUAL
+%nonassoc EXCM
+%left AND OR
+%nonassoc LT MT
 %left PLUS MINUS
-%left FOIS
+%left FOIS SLASH
 
 %start prog
 %%
@@ -121,13 +125,21 @@ expr:
 | e=unary_op { e }
 | e=binary_op { e }
 
+
 unary_op:
-| MINUS e=expr { match e with Cst(n) -> Cst(-n) | _ -> failwith "unary minus can only be aplyed ton const" }
+| MINUS e=expr { Unary(Minus, e) }
+| EXCM e=expr { Unary(Not, e) }
 
 binary_op:
-| e1=expr PLUS e2=expr { Add(e1, e2) }
-| e1=expr FOIS e2=expr { Mul(e1, e2) }
-| e1=expr LT e2=expr { Lt(e1, e2) }
+| e1=expr PLUS e2=expr { Binary(Add, e1, e2) }
+| e1=expr MINUS e2=expr { Binary(Sub, e1, e2) }
+| e1=expr FOIS e2=expr { Binary(Mul, e1, e2) }
+| e1=expr SLASH e2=expr { Binary(Div, e1, e2) }
+| e1=expr LT e2=expr { Binary(Lt, e1, e2) }
+| e1=expr MT e2=expr { Binary(Lt, e2, e1) }
+| e1=expr DBLEQUAL e2=expr { Binary(Eq, e1, e2) }
+| e1=expr AND AND e2=expr { Binary(And, e1, e2) }
+| e1=expr OR OR e2=expr { Binary(Or, e1, e2) }
 
 typ:
 | VOID { Void }
