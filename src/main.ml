@@ -11,7 +11,7 @@ let main () =
   else 
     begin
       let start_include = "#include \"" ^ Sys.argv.(1) ^ "\"\n" in
-      let buffer = preproc (Buffer.create 1000) (Lexing.from_string start_include) in
+      let buffer = preproc (Buffer.create 10000) (Lexing.from_string start_include) in
       let lexbuf = Lexing.from_string (Buffer.contents buffer) in
       let prog = prog scan lexbuf in
       printf "program: \n%s\n" (string_of_prog prog);

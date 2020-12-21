@@ -1,21 +1,24 @@
 int power(int n, int p)
 {
-    int result = 1;
-    while (p > 0)
+    if (p == 0)
     {
-        if (p % 2 == 0)
-        {
-            p = p / 2;
-            n = n * n;
-        }
-        else
-        {
-            p = p - 1;
-            result = result * n;
-            n = n * n;
-        }
+        return 1;
     }
-    return result;
+
+    if (p == 1)
+    {
+        return n;
+    }
+
+    int rec = power(n, p / 2);
+    if (p % 2 == 1)
+    {
+        return rec * rec * n;
+    }
+    else
+    {
+        return rec * rec;
+    }
 }
 
 void print_int(int n)
@@ -23,11 +26,12 @@ void print_int(int n)
     bool b = true;
     for (int i = 10000000000; i > 1; i = i / 10)
     {
-        int d = (n - (n % i)) / i;
-        n = n - (d * i);
+        int d = n - (n % i);
+        n = n - d;
         if (!(d == 0 && b))
         {
-            putchar(d + 48);
+            b = false;
+            putchar(d / i + 48);
         }
     }
     putchar(n + 48);
