@@ -55,7 +55,7 @@ non_semi_instr:
 | IF PAR_O expr PAR_F BR_O seq BR_F {}
 | IF PAR_O expr PAR_F BR_O seq BR_F ELSE BR_O seq BR_F {}
 | WHILE PAR_O expr PAR_F BR_O seq BR_F {}
-| FOR PAR_O var SEMI expr SEMI instr PAR_F BR_O seq BR_F {}
+| FOR PAR_O semi_instr SEMI semi_instr SEMI semi_instr PAR_F BR_O seq BR_F {}
 
 expr:
 | CONST {}

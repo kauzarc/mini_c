@@ -13,7 +13,7 @@ let main () =
       let file_chanel_in = open_in Sys.argv.(1) in
       let lexbuf = Lexing.from_channel file_chanel_in in
       let prog = prog scan lexbuf in
-      printf "%s\n" (prog_to_string prog);
+      printf "program: \n%s\n\n" (string_of_prog prog);
       if well_typed prog
       then 
         begin
