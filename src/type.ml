@@ -61,6 +61,9 @@ and type_binary_op env op e1 e2 =
   | Div -> if type_expr env e1 = Int && type_expr env e2 = Int
     then Int
     else failwith "can't divide non int value"
+  | Mod -> if type_expr env e1 = Int && type_expr env e2 = Int
+    then Int
+    else failwith "can't mod non int value"
   | Lt -> 
     if type_expr env e1 = Int && type_expr env e2 = Int
     then Bool

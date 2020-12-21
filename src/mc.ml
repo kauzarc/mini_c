@@ -19,6 +19,7 @@ and binary_op =
   | Sub
   | Mul
   | Div
+  | Mod
   | Lt
   | And
   | Or
@@ -111,6 +112,7 @@ and string_of_binary_op op =
   | Sub -> "Sub"
   | Mul -> "Mul"
   | Div -> "Div"
+  | Mod -> "Mod"
   | Lt -> "Lt"
   | And -> "And"
   | Or -> "Or"

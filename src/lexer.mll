@@ -26,6 +26,7 @@
             ('-', MINUS);
             ('*', FOIS);
             ('/', SLASH);
+            ('%', PERCENT);
             ('<', LT);
             ('>', MT);
             ('=', EQUAL);

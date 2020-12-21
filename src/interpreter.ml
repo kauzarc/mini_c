@@ -90,6 +90,12 @@ and eval_binary_op env op e1 e2 =
       let v2 = int_of_expr env e2 in
       Int(v1 / v2)
     end
+  | Mod ->
+    begin
+      let v1 = int_of_expr env e1 in
+      let v2 = int_of_expr env e2 in
+      Int(v1 mod v2)
+    end
   | Lt ->
     begin
       let v1 = int_of_expr env e1 in

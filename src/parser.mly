@@ -10,7 +10,7 @@
 %token <string> ID
 %token EQUAL
 %token PAR_O PAR_F BR_O BR_F
-%token PLUS MINUS FOIS SLASH LT MT DBLEQUAL EXCM AND OR
+%token PLUS MINUS FOIS SLASH PERCENT LT MT DBLEQUAL EXCM AND OR
 %token PUTCHAR IF ELSE WHILE RETURN FOR
 %token VOID INT BOOL
 %token COMMA SEMI
@@ -22,6 +22,7 @@
 %nonassoc EXCM
 %left AND OR
 %nonassoc LT MT
+%left PERCENT
 %left PLUS MINUS
 %left FOIS SLASH
 
@@ -135,6 +136,7 @@ binary_op:
 | e1=expr MINUS e2=expr { Binary(Sub, e1, e2) }
 | e1=expr FOIS e2=expr { Binary(Mul, e1, e2) }
 | e1=expr SLASH e2=expr { Binary(Div, e1, e2) }
+| e1=expr PERCENT e2=expr { Binary(Mod, e1, e2) }
 | e1=expr LT e2=expr { Binary(Lt, e1, e2) }
 | e1=expr MT e2=expr { Binary(Lt, e2, e1) }
 | e1=expr DBLEQUAL e2=expr { Binary(Eq, e1, e2) }
