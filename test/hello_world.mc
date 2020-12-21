@@ -1,3 +1,5 @@
+#include "./dummy.mc"
+
 void print_hello_world()
 {
     putchar(104);
